@@ -21,5 +21,19 @@ namespace FilmesAPI.Controllers
         {
             return _filmes;
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetFilme(Guid id)
+        {
+            var filme = _filmes.Find(f => f.Id == id);
+
+            if (filme == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(filme);
+
+        }
     }
 }
