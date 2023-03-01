@@ -11,15 +11,17 @@ namespace FilmesAPI.Controllers
         private static List<Filme> _filmes = new();
 
         [HttpPost]
-        public void AdicionaFilme([FromBody]Filme filme)
+        public IActionResult AdicionaFilme([FromBody]Filme filme)
         {
             _filmes.Add(filme);
+
+            return Created($"/Filme/{filme.Id}", filme);
         }
 
         [HttpGet]
-        public IEnumerable<Filme> GetFilmes()
+        public IEnumerable<Filme> GetFilmes([FromQuery]int skip = 0, [FromQuery]int take = 10)
         {
-            return _filmes;
+            return _filmes.Skip(skip).Take(take);
         }
 
         [HttpGet("{id}")]
