@@ -25,7 +25,7 @@ namespace FilmesAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetFilme(Guid id)
         {
-            var filme = _filmes.Find(f => f.Id == id);
+            var filme = _filmes.FirstOrDefault(f => f.Id == id);
 
             if (filme == null)
             {
