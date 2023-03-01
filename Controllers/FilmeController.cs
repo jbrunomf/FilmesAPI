@@ -1,5 +1,7 @@
 ﻿using System.Net.NetworkInformation;
+using AutoMapper;
 using FilmesAPI.Data;
+using FilmesAPI.DTO;
 using FilmesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +13,19 @@ namespace FilmesAPI.Controllers
     public class FilmeController : ControllerBase
     {
         private DataContext _dataContext;
-
-        public FilmeController(DataContext context)
+        private IMapper _mapper;
+        
+        public FilmeController(DataContext context, IMapper mapper)
         {
             _dataContext = context;
+            _mapper = mapper;
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> AdicionaFilme([FromBody]Filme filme)
+        public async Task<IActionResult> AdicionaFilme([FromBody]FilmeDTO filmeDto)
         {
+            Filme filme = _mapper.Map<Filme>(filmeDto);
             _dataContext.Add(filme);
             await _dataContext.SaveChangesAsync();
             return Created($"/Filme/{filme.Id}", filme);
