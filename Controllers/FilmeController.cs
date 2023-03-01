@@ -1,6 +1,8 @@
 ﻿using System.Net.NetworkInformation;
+using FilmesAPI.Data;
 using FilmesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmesAPI.Controllers
 {
@@ -8,26 +10,32 @@ namespace FilmesAPI.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private static List<Filme> _filmes = new();
+        private DataContext _dataContext;
+
+        public FilmeController(DataContext context)
+        {
+            _dataContext = context;
+        }
+
 
         [HttpPost]
-        public IActionResult AdicionaFilme([FromBody]Filme filme)
+        public async Task<IActionResult> AdicionaFilme([FromBody]Filme filme)
         {
-            _filmes.Add(filme);
-
+            _dataContext.Add(filme);
+            await _dataContext.SaveChangesAsync();
             return Created($"/Filme/{filme.Id}", filme);
         }
 
         [HttpGet]
-        public IEnumerable<Filme> GetFilmes([FromQuery]int skip = 0, [FromQuery]int take = 10)
+        public IActionResult GetFilmes([FromQuery]int skip = 0, [FromQuery]int take = 10)
         {
-            return _filmes.Skip(skip).Take(take);
+            return Ok(_dataContext.Filmes.Skip(skip).Take(take));
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetFilme(Guid id)
+        public async Task<IActionResult> GetFilme(Guid id)
         {
-            var filme = _filmes.FirstOrDefault(f => f.Id == id);
+            var filme = await _dataContext.Filmes.FirstOrDefaultAsync(f => f.Id == id);
 
             if (filme == null)
             {
