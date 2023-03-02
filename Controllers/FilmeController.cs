@@ -88,5 +88,17 @@ namespace FilmesAPI.Controllers
              await _dataContext.SaveChangesAsync();
              return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarFilme(Guid id)
+        {
+            var filme = await _dataContext.Filmes.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (filme == null) return NotFound();
+
+            _dataContext.Remove(filme);
+            _dataContext.SaveChanges();
+            return NoContent();
+        }
     }
 }
