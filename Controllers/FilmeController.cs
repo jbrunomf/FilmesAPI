@@ -12,8 +12,8 @@ namespace FilmesAPI.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private DataContext _dataContext;
-        private IMapper _mapper;
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
         
         public FilmeController(DataContext context, IMapper mapper)
         {
@@ -49,6 +49,23 @@ namespace FilmesAPI.Controllers
 
             return Ok(filme);
 
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizaFilme(Guid id, [FromBody]UpdateFilmeDto dto)
+        {
+            var filme = await _dataContext.Filmes.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (filme == null) return NotFound();
+            //filme.Duracao = dto.Duracao;
+            //filme.Genero = dto.Genero;
+            //filme.Titulo = dto.Titulo;
+            //_dataContext.Filmes.Update(filme);
+            //_dataContext.SaveChanges();
+            //Utilizando AutoMapper:
+            _mapper.Map(dto, filme);
+            _dataContext.SaveChanges();
+            return Ok(filme);
         }
     }
 }
