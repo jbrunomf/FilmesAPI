@@ -24,6 +24,7 @@ namespace FilmesAPI.Controllers
 
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> AdicionaFilme([FromBody]FilmeDTO filmeDto)
         {
             Filme filme = _mapper.Map<Filme>(filmeDto);
