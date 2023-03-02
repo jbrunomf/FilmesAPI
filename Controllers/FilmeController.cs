@@ -65,7 +65,7 @@ namespace FilmesAPI.Controllers
             //Utilizando AutoMapper:
             _mapper.Map(dto, filme);
             _dataContext.SaveChanges();
-            return Ok(filme);
+            return NoContent();
         }
     }
 }
