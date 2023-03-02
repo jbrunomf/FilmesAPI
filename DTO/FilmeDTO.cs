@@ -8,7 +8,7 @@ namespace FilmesAPI.DTO
         public string Titulo { get; set; }
 
         [Required(ErrorMessage = "{0} é obrigatório.")]
-        [MaxLength(50, ErrorMessage = "O {0} deve até {1} caracteres.")]
+        [StringLength(50, ErrorMessage = "O {0} deve até {1} caracteres.")]
         public string Genero { get; set; }
 
         [Required]
