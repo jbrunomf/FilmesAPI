@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Runtime.InteropServices.ComTypes;
+using AutoMapper;
 using FilmesAPI.Data;
 using FilmesAPI.DTO;
 using FilmesAPI.Models;
@@ -44,7 +45,7 @@ public class CinemaController : ControllerBase
         return _mapper.Map<List<ReadCinemaDto>>(_context.Cinemas.ToList());
     }
 
-    [HttpPut]
+    [HttpPut("id")]
     public IActionResult AtualizaCinema(Guid id, [FromBody] UpdateCinemaDto cinemaDto)
     {
         Cinema? cinema = _context.Cinemas.FirstOrDefault(c => c.Id == id);
@@ -53,6 +54,15 @@ public class CinemaController : ControllerBase
         _context.SaveChanges();
         return NoContent();
     }
-    
-    
+
+    [HttpDelete("id")]
+    public IActionResult DeletaCinema(Guid id)
+    {
+        Cinema? cinema = _context.Cinemas.FirstOrDefault(c => c.Id == id);
+        if (cinema == null) return NotFound();
+
+        _context.Cinemas.Remove(cinema);
+        _context.SaveChanges();
+        return Ok();
+    }
 }
