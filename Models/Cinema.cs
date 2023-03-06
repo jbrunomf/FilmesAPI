@@ -9,4 +9,7 @@ public class Cinema
     public Guid Id { get; set; }
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     public string Nome { get; set; }
+
+    public Guid EnderecoId { get; set; }
+    public virtual Endereco Endereco { get; set; }
 }
