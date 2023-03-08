@@ -17,6 +17,9 @@ namespace FilmesAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>
@@ -82,6 +85,22 @@ namespace FilmesAPI.Migrations
                     b.ToTable("Filmes");
                 });
 
+            modelBuilder.Entity("FilmesAPI.Models.Sessao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("FilmeId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilmeId");
+
+                    b.ToTable("Sessoes");
+                });
+
             modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>
                 {
                     b.HasOne("FilmesAPI.Models.Endereco", "Endereco")
@@ -93,10 +112,22 @@ namespace FilmesAPI.Migrations
                     b.Navigation("Endereco");
                 });
 
+            modelBuilder.Entity("FilmesAPI.Models.Sessao", b =>
+                {
+                    b.HasOne("FilmesAPI.Models.Filme", null)
+                        .WithMany("Sessoes")
+                        .HasForeignKey("FilmeId");
+                });
+
             modelBuilder.Entity("FilmesAPI.Models.Endereco", b =>
                 {
                     b.Navigation("Cinema")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FilmesAPI.Models.Filme", b =>
+                {
+                    b.Navigation("Sessoes");
                 });
 #pragma warning restore 612, 618
         }
