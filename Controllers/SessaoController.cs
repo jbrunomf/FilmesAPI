@@ -41,7 +41,7 @@ public class SessaoController : Controller
     [HttpGet]
     public IActionResult RecuperaSessao()
     {
-        if (_context.Sessoes.Any()) return Ok(_context.Sessoes.ToList());
+        if (_context.Sessoes.Any()) return Ok(_mapper.Map<ICollection<Sessao>, ICollection<ReadSessaoDto>>(_context.Sessoes.ToList()));
         return NotFound();
     }
 

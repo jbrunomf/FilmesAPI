@@ -36,7 +36,7 @@ namespace FilmesAPI.Controllers
         [HttpGet]
         public IActionResult GetFilmes([FromQuery]int skip = 0, [FromQuery]int take = 10)
         {
-            return Ok(_dataContext.Filmes.Skip(skip).Take(take));
+            return Ok(_mapper.Map<ICollection<Filme>, ICollection<ReadFilmeDto>>(_dataContext.Filmes.Skip(skip).Take(take).ToList()));
         }
 
         [HttpGet("{id}")]

@@ -9,10 +9,8 @@ public class Sessao
     public Guid Id { get; set; }
     [Required]
     public Guid FilmeId { get; set; }
-
     public virtual Filme Filme { get; set; }
     
-    [Required]
-    public Guid CinemaId { get; set; }
+    public Guid? CinemaId { get; set; }
     public virtual Cinema Cinema { get; set; }
 }

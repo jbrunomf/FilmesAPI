@@ -91,10 +91,15 @@ namespace FilmesAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("FilmeId")
+                    b.Property<Guid?>("CinemaId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("FilmeId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CinemaId");
 
                     b.HasIndex("FilmeId");
 
@@ -114,9 +119,24 @@ namespace FilmesAPI.Migrations
 
             modelBuilder.Entity("FilmesAPI.Models.Sessao", b =>
                 {
-                    b.HasOne("FilmesAPI.Models.Filme", null)
+                    b.HasOne("FilmesAPI.Models.Cinema", "Cinema")
                         .WithMany("Sessoes")
-                        .HasForeignKey("FilmeId");
+                        .HasForeignKey("CinemaId");
+
+                    b.HasOne("FilmesAPI.Models.Filme", "Filme")
+                        .WithMany("Sessoes")
+                        .HasForeignKey("FilmeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cinema");
+
+                    b.Navigation("Filme");
+                });
+
+            modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>
+                {
+                    b.Navigation("Sessoes");
                 });
 
             modelBuilder.Entity("FilmesAPI.Models.Endereco", b =>
