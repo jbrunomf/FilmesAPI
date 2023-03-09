@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using Castle.DynamicProxy.Internal;
 using FilmesAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,11 +25,16 @@ namespace FilmesAPI.Data
                 .HasOne(sessao => sessao.Filme)
                 .WithMany(filme => filme.Sessoes)
                 .HasForeignKey(sessao => sessao.FilmeId);
+
+            modelBuilder.Entity<Endereco>()
+                .HasOne<Cinema>(endereco => endereco.Cinema)
+                .WithOne(cinema => cinema.Endereco)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public DbSet<Filme> Filmes { get; set; }
-        public DbSet<Cinema> Cinemas { get; set; }
-        public DbSet<Endereco> Enderecos { get; set; }
-        public DbSet<Sessao> Sessoes { get; set; }
+        public DbSet<Filme>? Filmes { get; set; }
+        public DbSet<Cinema>? Cinemas { get; set; }
+        public DbSet<Endereco>? Enderecos { get; set; }
+        public DbSet<Sessao>? Sessoes { get; set; }
     }
 }
