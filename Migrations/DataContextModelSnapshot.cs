@@ -94,7 +94,7 @@ namespace FilmesAPI.Migrations
                     b.Property<Guid?>("CinemaId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("FilmeId")
+                    b.Property<Guid?>("FilmeId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -125,9 +125,7 @@ namespace FilmesAPI.Migrations
 
                     b.HasOne("FilmesAPI.Models.Filme", "Filme")
                         .WithMany("Sessoes")
-                        .HasForeignKey("FilmeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FilmeId");
 
                     b.Navigation("Cinema");
 
