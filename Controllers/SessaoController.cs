@@ -26,15 +26,19 @@ public class SessaoController : Controller
         Sessao sessao = _mapper.Map<Sessao>(createSessaoDto);
         _context.Sessoes.Add(sessao);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(RecuperaSessaoporId), new { Id = sessao.Id }, sessao);
+        return CreatedAtAction(nameof(RecuperaSessaoporId), new { Filmeid = sessao.FilmeId, CinemaId = sessao.CinemaId }, sessao);
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public IActionResult RecuperaSessaoporId(Guid id)
+    [Route("{filmeId}/{cinemaId}")]
+    public IActionResult RecuperaSessaoporId(Guid filmeId, Guid cinemaId)
     {
-        var sessao = _context.Sessoes.FirstOrDefault(s => s.Id == id);
-        if (sessao != null) return Ok(sessao);
+        var sessao = _context.Sessoes.FirstOrDefault(s => s.FilmeId == filmeId && s.CinemaId == cinemaId);
+        if (sessao != null)
+        {
+            ReadSessaoDto sessaoDto = _mapper.Map<ReadSessaoDto>(sessao);
+            return Ok(sessao);
+        }
         return NotFound();
     }
 
@@ -45,10 +49,10 @@ public class SessaoController : Controller
         return NotFound();
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeletaSessao(Guid id)
+    [HttpDelete("{filmeId}/{cinemaId}")]
+    public IActionResult DeletaSessao(Guid filmeid, Guid cinemaId)
     {
-        var sessao = _context.Sessoes.FirstOrDefault(s => s.Id == id);
+        var sessao = _context.Sessoes.FirstOrDefault(s => s.FilmeId == filmeid && s.CinemaId == cinemaId);
 
         if (sessao == null) return NotFound("Sessão não encontrada.");
         _context.Sessoes.Remove(sessao);

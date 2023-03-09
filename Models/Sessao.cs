@@ -4,10 +4,6 @@ namespace FilmesAPI.Models;
 
 public class Sessao
 {
-    [Key]
-    [Required]
-    public Guid Id { get; set; }
-
     public Guid? FilmeId { get; set; }
     public virtual Filme Filme { get; set; }
     

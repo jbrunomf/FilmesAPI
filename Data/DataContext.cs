@@ -1,4 +1,5 @@
-﻿using FilmesAPI.Models;
+﻿using System.Collections.Immutable;
+using FilmesAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FilmesAPI.Data
@@ -7,6 +8,22 @@ namespace FilmesAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Sessao>()
+                .HasKey(sessao => new { sessao.FilmeId, sessao.CinemaId });
+
+            modelBuilder.Entity<Sessao>()
+                .HasOne(sessao => sessao.Cinema)
+                .WithMany(cinema => cinema.Sessoes)
+                .HasForeignKey(sessao => sessao.CinemaId);
+            
+            modelBuilder.Entity<Sessao>()
+                .HasOne(sessao => sessao.Filme)
+                .WithMany(filme => filme.Sessoes)
+                .HasForeignKey(sessao => sessao.FilmeId);
         }
 
         public DbSet<Filme> Filmes { get; set; }
