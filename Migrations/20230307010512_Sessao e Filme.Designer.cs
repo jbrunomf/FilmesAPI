@@ -3,6 +3,7 @@ using System;
 using FilmesAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmesAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230307010512_Sessao e Filme")]
+    partial class SessaoeFilme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,15 +90,16 @@ namespace FilmesAPI.Migrations
 
             modelBuilder.Entity("FilmesAPI.Models.Sessao", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
                     b.Property<Guid?>("FilmeId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CinemaId")
-                        .HasColumnType("char(36)");
+                    b.HasKey("Id");
 
-                    b.HasKey("FilmeId", "CinemaId");
-
-                    b.HasIndex("CinemaId");
+                    b.HasIndex("FilmeId");
 
                     b.ToTable("Sessoes");
                 });
@@ -105,7 +109,7 @@ namespace FilmesAPI.Migrations
                     b.HasOne("FilmesAPI.Models.Endereco", "Endereco")
                         .WithOne("Cinema")
                         .HasForeignKey("FilmesAPI.Models.Cinema", "EnderecoId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Endereco");
@@ -113,26 +117,9 @@ namespace FilmesAPI.Migrations
 
             modelBuilder.Entity("FilmesAPI.Models.Sessao", b =>
                 {
-                    b.HasOne("FilmesAPI.Models.Cinema", "Cinema")
+                    b.HasOne("FilmesAPI.Models.Filme", null)
                         .WithMany("Sessoes")
-                        .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FilmesAPI.Models.Filme", "Filme")
-                        .WithMany("Sessoes")
-                        .HasForeignKey("FilmeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cinema");
-
-                    b.Navigation("Filme");
-                });
-
-            modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>
-                {
-                    b.Navigation("Sessoes");
+                        .HasForeignKey("FilmeId");
                 });
 
             modelBuilder.Entity("FilmesAPI.Models.Endereco", b =>
